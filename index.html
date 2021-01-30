@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curies Booking</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!--Header and Menu Section-->
+    <header class="container">
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><a class="active" href="#">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!--Booking Section-->
+    <main id="mainSection" class="main-content container">
+
+        <div class="booking-content">
+            <h1>Cruise Queen</h1>
+            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book./p>
+        </div>
+
+
+        <div id="bookingForm" class="booking-form">
+            <h3>Book Ocean Time</h3>
+            <div class="input-group">
+                <label for="">Flying From</label>
+                <input class="inp-style" type="text" name="" placeholder="Dhaka, Bangladesh">
+            </div>
+            <div class="input-group">
+                <label for="">Flying To</label>
+                <input class="inp-style" type="text" name="" placeholder="New York, United States">
+            </div>
+            <div class="inputs">
+                <div class="input-group">
+                    <label" for="">Departure</label>
+                    <input class="inp-style" type="date" name="">
+                </div>
+                <div class="input-group">
+                    <label for="">Return</label>
+                    <input class="inp-style" type="date" name="">
+                </div>
+            </div>
+            <div class="input-group f-class">
+                <div>
+                    <label for="firstClassCount">First Class ($<span id="firstClassTotal">150</span>)</label>
+                    <input id="firstClassCount" class="inp-style inp-width form-control" type="text" value="1">
+                </div>
+                <div class="plus-minus-btn">
+                    <button id="addFirstClassTicket">+</button>
+                     <button id="removeFirstClassTicket">-</button>
+                </div>
+            </div>
+            
+            <div class="input-group f-class">
+                <div>
+                    <label for="economyCount">Economy ($<span id="economyTotal">100</span>)</label>
+                    <input id="economyCount" class="inp-style inp-width form-control" type="text" value="1">
+                </div>
+                <div class="plus-minus-btn">
+                    <button id="addEconomyTicket">+</button> 
+                    <button id="removeEconomyTicket">-</button> 
+                </div>
+            </div>
+            <div class="calculations">
+                <div class="amount">
+                    <div class="left">
+                        <p>Subtotal</p>
+                    </div>
+                    <div class="right">
+                        <p>$<span id="subTotalPrice">250</span></p>
+                    </div>
+                </div>
+
+                <div class="amount">
+                    <div class="left">
+                        <p>Charge 10% VAT</p>
+                    </div>
+                    <div class="right">
+                        <p>$<span id="taxAmount">25</span></p>
+                    </div>
+                </div>
+                <hr>
+                <div class="amount">
+                    <div class="left">
+                        <h4>Total</h4>
+                    </div>
+                    <div class="right">
+                        <p>$<span id="totalTicketPrice">275</span></p>
+                    </div>
+                </div>
+            </div>
+            <button id="bookNow" class="btn-style">Book Now</button>
+        </div>
+    </main>
+
+<!-- Confirmation area -->
+    <div id="confirmationShowHide" class="confirmation-area">
+        <h1>Your Ticket buying Successfully</h1>
+        <h3>You are bye <span id="firstClassConfirm">0</span> first class sit and <span id="economyConfirm">0</span> economy sit.</h3>
+        <h3>Your Total Cost $<span id="confirmTotal">0</span></h3>
+        <h4>Thank you</h4>
+        <button id="backButton">Back To Home</button>
+    </div>
+    <script>
+
+    // This function use for count ticket first class and economic 
+        function controlTicket(typeOfTicket, counting){
+            const ticketInput = document.getElementById(typeOfTicket + "Count");
+            const ticketCount = parseInt(ticketInput.value);
+            let newTicketCount = ticketCount;
+
+            if(counting == true){
+                newTicketCount = ticketCount + 1;
+            }
+            if(counting == false && ticketCount > 0){
+                newTicketCount = ticketCount - 1;
+            }
+            ticketInput.value = newTicketCount; 
+    // Output subtotal vat and total cost
+            totalCalculate()
+        }
+    // Count ticket event handler
+        document.getElementById("addFirstClassTicket").addEventListener('click', function(){
+            controlTicket("firstClass", true);
+        })
+        document.getElementById("removeFirstClassTicket").addEventListener('click', function(){
+            controlTicket("firstClass", false);
+        })
+
+        document.getElementById("addEconomyTicket").addEventListener('click', function(){
+            controlTicket("economy", true);
+        })
+        document.getElementById("removeEconomyTicket").addEventListener('click', function(){
+            controlTicket("economy", false);
+        })
+
+    // This function use for subtotal vat and total cost calculation
+        function totalCalculate (){
+            const firstClassCounts = getInputTicket("firstClass");
+            const economyCounts = getInputTicket("economy");
+
+            const totalPrice = firstClassCounts * 150 + economyCounts * 100;
+            document.getElementById("subTotalPrice").innerText = totalPrice;
+
+            const vat = totalPrice * 0.1;
+            document.getElementById("taxAmount").innerText = vat;
+
+            const allCost = totalPrice + vat;
+            document.getElementById("totalTicketPrice").innerText = allCost;
+        }
+    // This function use for ticket counts
+        function getInputTicket(typeOfTicket){
+            const ticketInput = document.getElementById(typeOfTicket + "Count");
+            const ticketCounts = parseInt(ticketInput.value);
+            return ticketCounts;
+        }
+    // Book now event handler
+        document.getElementById("bookNow").addEventListener('click', function(){
+            const hideSection = document.getElementById("mainSection");
+            hideSection.style.display = "none";
+            
+            const showSection = document.getElementById("confirmationShowHide");
+            showSection.style.display = "block";
+    // Output showing ticket count in confirmation area
+            confirmationCount("firstClass");
+            confirmationCount("economy");
+
+    // Output showing total cost confirmation area
+            const confirmationTotal = document.getElementById("totalTicketPrice");
+            const confirmationTotalCost = parseInt(confirmationTotal.innerText);
+            document.getElementById("confirmTotal").innerText = confirmationTotalCost;
+           
+
+        })
+    // this function use for confirmation section show ticket count
+        function confirmationCount(typeOfTicket){
+            const countConfirm = document.getElementById(typeOfTicket + "Count");
+            const count = parseInt(countConfirm.value);
+            document.getElementById(typeOfTicket + "Confirm").innerText = count;
+        }
+    // Back to home event handler
+        document.getElementById("backButton").addEventListener('click', function(){
+            
+            const showSection = document.getElementById("confirmationShowHide");
+            showSection.style.display = "none";
+
+            const backToHome = document.getElementById("mainSection");
+            backToHome.style.display = "block";
+            backToHome.style.display = "flex";
+
+            const book = document.getElementById("bookingForm");
+            book.style.marginRight = "50px"; 
+        })
+    </script>
+</body>
+
+</html>
